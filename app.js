@@ -1,9 +1,19 @@
 import dotenv, { config } from 'dotenv';
-// dotenv.config();
+dotenv.config();
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
+
+
+
+
+// Routing
+app.route('user/api/v1',userRegister);
+
+
+
+
 
 
 // config();
