@@ -1,15 +1,17 @@
 import dotenv, { config } from 'dotenv';
 dotenv.config();
 import express from 'express';
+import userRouters from './routes/user.routes.js'
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
 
 
 
+const app =express();
 
 // Routing
-app.route('user/api/v1',userRegister);
+app.route('user/api/v1', userRouters);
 
 
 
@@ -18,7 +20,6 @@ app.route('user/api/v1',userRegister);
 
 // config();
 
-const app =express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
