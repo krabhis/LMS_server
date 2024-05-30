@@ -5,6 +5,7 @@ import userRouters from './routes/user.routes.js'
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
+import { closeSync } from 'fs';
 
 
 
@@ -30,8 +31,8 @@ credentials:true
 
 }));
 
-app.use(cookieParser());
-app.use(morgan('dev'));
+app.use(cookieParser());//middleware
+app.use(morgan('dev'));//middleware
 
 
 // To check wheather server is up or not
@@ -50,5 +51,6 @@ res.status(404).send('Opps! 404 Page is not found')
 
 
 export default app;
+
 
 
