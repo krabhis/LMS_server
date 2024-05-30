@@ -1,8 +1,10 @@
 import User from "../models/user.model.js";
+import AppError from "../utils/error.util.js";
+import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto';
-import AppError from "../utils/error.util.js";
+import asyncHandler from '../middlewares/asyncHandler.middleware.js
 
 
 
@@ -26,7 +28,6 @@ if(userExists){
 return next(new AppError(`Email already exists`,400));
 
 }
-// creating new user
 const user = await User.create({
 fullName,
 email,
@@ -42,6 +43,35 @@ return next(new AppError('User registration failed, please try again',400))
 }
 
 // TODO File UPload
+console.log('File Details:',req.file);
+
+if (req.file) {
+    try {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: 'lms', // Save files in a folder named lms
+        width: 250,
+        height: 250,
+        gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
+        crop: 'fill',
+      });
+
+      // If success
+      if (result) {
+        // Set the public_id and secure_url in DB
+        user.avatar.public_id = result.public_id;
+        user.avatar.secure_url = result.secure_url;
+
+        // After successful upload remove the file from local storage
+        fs.rm(`uploads/${req.file.filename}`);
+      }
+    } catch (error) {
+      return next(
+        new AppError(error || 'File not uploaded, please try again', 400)
+      );
+    }
+  }
+
+
 
 
 await user.save();
@@ -50,7 +80,7 @@ user.password= undefined;
 
 const token=await user.generateJWTToken();
 
-res.cookie('token', token , cookieOptions)
+res.cookie('token', token,cookieOptions)
 
 
 res.status(201).json({
@@ -60,6 +90,9 @@ user,
 
 
 })
+
+
+
 
 
 
@@ -270,36 +303,36 @@ if(!user){
 if(req.fullName){
     user.fullName= fullName;
 }
-// if(req.file){
-//     await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-//     try {
-//         const result = await cloudinary.v2.uploader.upload(req.file.path, {
-//           folder: 'lms', // Save files in a folder named lms
-//           width: 250,
-//           height: 250,
-//           gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
-//           crop: 'fill',
-//         });
+if(req.file){
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+    try {
+        const result = await cloudinary.v2.uploader.upload(req.file.path, {
+          folder: 'lms', // Save files in a folder named lms
+          width: 250,
+          height: 250,
+          gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
+          crop: 'fill',
+        });
   
-//         // If success
-//         if (result) {
-//           // Set the public_id and secure_url in DB
-//           user.avatar.public_id = result.public_id;
-//           user.avatar.secure_url = result.secure_url;
+        // If success
+        if (result) {
+          // Set the public_id and secure_url in DB
+          user.avatar.public_id = result.public_id;
+          user.avatar.secure_url = result.secure_url;
   
-//           // After successful upload remove the file from local storage
-//           fs.rm(`uploads/${req.file.filename}`);
-//         }
-//       } catch (error) {
-//         return next(
-//           new AppError(error || 'File not uploaded, please try again', 400)
-//         );
-//       }
+          // After successful upload remove the file from local storage
+          fs.rm(`uploads/${req.file.filename}`);
+        }
+      } catch (error) {
+        return next(
+          new AppError(error || 'File not uploaded, please try again', 400)
+        );
+      }
 
     
 
 
-// }
+}
 
 await user.save();
 
@@ -324,3 +357,4 @@ changePassword,
 resetPassword,
 updateUser
 }
+
