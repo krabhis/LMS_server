@@ -1,7 +1,8 @@
 import dotenv, { config } from 'dotenv';
 dotenv.config();
 import express from 'express';
-import userRouters from './routes/user.routes.js'
+import userRoutes from './routes/user.routes.js'
+import courseRoutes from './routes/course.routes.js'
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -12,7 +13,10 @@ import { closeSync } from 'fs';
 const app =express();
 
 // Routing
-app.route('user/api/v1', userRouters);
+app.route('/api/v1/user',userRoutes);
+app.route('/api/v1/courses',courseRoutes);
+
+
 
 
 
