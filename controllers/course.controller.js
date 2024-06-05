@@ -4,7 +4,10 @@ import AppError from '../utils/error.util.js';
 
 
 
-const getAllCourses=async function (req,res,next){
+
+
+
+
     const getAllCourses = async function(req,res,next){
         try{
         const courses = await Course.find({}).select('-lectures');
@@ -25,7 +28,7 @@ const getAllCourses=async function (req,res,next){
     
         }
 
-}
+
 
 const getLecturesByCourseId=  async function(req,res,next){
     try{
