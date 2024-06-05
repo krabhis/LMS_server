@@ -2,15 +2,17 @@ import User from "../models/user.model.js";
 import AppError from "../utils/error.util.js";
 import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
+import bcrypt from 'bcrypt';
+
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto';
-import asyncHandler from '../middlewares/asyncHandler.middleware.js
+// import asyncHandler from '../middlewares/asyncHandler.middleware.js
 
 
 
 
 const cookieOptions={
-maxAge:7*24*60*60*1000, //7 days
+maxAge:7*24*60*60*1000, //7 days in millisec
 httpOnly:true,
 secure:true
 
@@ -34,7 +36,7 @@ email,
 password,
 avatar:{
     public_id: email,
-    secure_url:`https://res.cloudinary`
+    secure_url:"",
 }
 });
 
@@ -64,7 +66,8 @@ if (req.file) {
         // After successful upload remove the file from local storage
         fs.rm(`uploads/${req.file.filename}`);
       }
-    } catch (error) {
+    } 
+    catch (error) {
       return next(
         new AppError(error || 'File not uploaded, please try again', 400)
       );
@@ -80,7 +83,7 @@ user.password= undefined;
 
 const token=await user.generateJWTToken();
 
-res.cookie('token', token,cookieOptions)
+res.cookie('token', token ,cookieOptions)  
 
 
 res.status(201).json({
@@ -166,13 +169,14 @@ user
 
 });
 
-    }catch(e){
+    }
+    catch(e){
         return next(new AppError('Failed to fetch profile'))
 }
 
 };
 
-const forgotPassword= async (req,res)=>{
+const forgotPassword= async (req,res,next)=>{
     const {email}=req.body;
 
     if(!email){
@@ -180,6 +184,7 @@ const forgotPassword= async (req,res)=>{
 
     }
     const user=await User.findOne({email});
+    
     if(!user){
         return next (new AppError('Email not registered',400));
     }
@@ -187,7 +192,7 @@ const forgotPassword= async (req,res)=>{
     const resetToken= await user.generatePasswordResetToken();
      
     await user.save();
-    const resetPasswordUrl = `${process.env.FRONTENED_URL}/reset-password/${resetToken}`;
+    const resetPasswordUrl = `${process.env.FRONTENED_URL}/reset-password/${resetToken}`;//url jo mail me send krne liye...
 
     console.log(resetPasswordUrl);
 
@@ -295,8 +300,9 @@ const user = await User.findById(id);
 
 if(!user){
 
-    return next()
+    return next(
         new AppError('User does not exist' , 400)
+    )
 
 }
 
