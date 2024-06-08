@@ -23,7 +23,7 @@ const authorizeRoles= (...roles)=>async(req,res,next)=>{
 
   }
   next();
-
+  
 }
 const authorizeSubscribers= async(req,res)=>{
   const subscription=req.user.subscription;
