@@ -50,7 +50,7 @@ console.log('File Details:',req.file);
 if (req.file) {
     try {
       const result = await cloudinary.v2.uploader.upload(req.file.path, {
-        folder: 'lms', // Save files in a folder named lms
+        folder: 'learn_management_sys', // Save files in a folder named lms
         width: 250,
         height: 250,
         gravity: 'faces', // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
@@ -64,7 +64,7 @@ if (req.file) {
         user.avatar.secure_url = result.secure_url;
 
         // After successful upload remove the file from local storage
-        fs.rm(`uploads/${req.file.filename}`);
+         await fs.rm(`uploads/${req.file.filename}`);
       }
     } 
     catch (error) {

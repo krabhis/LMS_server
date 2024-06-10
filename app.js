@@ -13,7 +13,7 @@ import { closeSync } from 'fs';
 const app =express();
 
 // Routing
-app.route('/api/v1/user',userRoutes);
+app.use('/api/v1/user',userRoutes);
 app.route('/api/v1/courses',courseRoutes);
 
 
