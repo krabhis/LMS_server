@@ -45,7 +45,7 @@ return next(new AppError('User registration failed, please try again',400))
 }
 
 // TODO File UPload
-console.log('File Details:',req.file);
+// console.log('File Details:',req.file);
 
 if (req.file) {
     try {
