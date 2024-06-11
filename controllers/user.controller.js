@@ -36,7 +36,7 @@ email,
 password,
 avatar:{
     public_id: email,
-    secure_url:"",
+    secure_url:"https://res.cloudinary",
 }
 });
 
@@ -68,9 +68,8 @@ if (req.file) {
       }
     } 
     catch (error) {
-      return next(
-        new AppError(error || 'File not uploaded, please try again', 400)
-      );
+        console.error("Cloudinary Upload Error:", error.message || JSON.stringify(error));
+        return next(new AppError(error.message || 'File not uploaded, please try again', 400));
     }
   }
 
@@ -105,7 +104,7 @@ const login=async (req,res,next)=>{
     try{
 
 
-    const{email,password }=req.body;
+    const{ email,password }=req.body;
     if(!email || !password){
         return next(new AppError('All fields are required',400));
     }

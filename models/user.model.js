@@ -4,12 +4,12 @@ import jwt from 'jsonwebtoken';
 
 
 const userSchema= new Schema({
-    fullName:{
-        type:"String",
-        required:[true,'Name is required'],
-        minLength:[5,'Name should be less than 50 characters'],
-        lowercase:true,
-        trim:true,
+    fullName: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 50,
+        trim: true // Ensure no leading/trailing whitespace
     },
     email:{
         type:'String',
