@@ -3,7 +3,6 @@ import connectionToDB from './config/dbConnection.js';
 import cloudinary from 'cloudinary';
 
 
-
 const PORT=process.env.PORT||1000;
 
 cloudinary.v2.config({
