@@ -1,11 +1,12 @@
 import User from "../models/user.model.js";
 import AppError from "../utils/error.util.js";
 import cloudinary from 'cloudinary';
+import jwt from "jsonwebtoken";
 import fs from 'fs/promises';
 import bcrypt from 'bcrypt';
-
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto';
+// import { log } from "console";
 // import asyncHandler from '../middlewares/asyncHandler.middleware.js
 
 
@@ -97,46 +98,40 @@ user,
 
 
 
-
 };
-
-const login=async (req,res,next)=>{
-    try{
-
-
-    const{ email,password }=req.body;
-    if(!email || !password){
-        return next(new AppError('All fields are required',400));
+const login = async (req, res, next) => {
+    // Destructuring the necessary data from req object
+    const { email, password } = req.body;
+    console.log(req.body)
+  
+    if (!email || !password) {
+      return next(new AppError('Email and Password are required', 400));
     }
-
-    const user=await User.findOne({
-        email
-
-    }).select('+password');
-
-    if(!user || !user.comparePassword(password)){
-        return next(new AppError('Email or Password does not match',400))
+  
+    const user = await User.findOne({ email }).select('+password');
+  
+    // If no user or sent password do not match then send generic response
+    if (!(user && (await user.comparePassword(password)))) {
+      return next(
+        new AppError('Email or Password do not match or user does not exist', 401)
+      );
     }
+  
+    // Generating a JWT token
     const token = await user.generateJWTToken();
-    res.cookie('token',token,cookieOptions);
-
+  
+    // Setting the password to undefined so it does not get sent in the response
+    user.password = undefined;
+  
+    // Setting the token in the cookie with name token along with cookieOptions
+    res.cookie('token', token, cookieOptions);
+  
     res.status(200).json({
-        sucess:true,
-        message:'User loggedin successfully',
-        user,
+      success: true,
+      message: 'User logged in successfully',
+      user,
     });
-
-
-    }
-    catch(e)
-    {
-
-        return next(new AppError(e.message,500));
-
-
-    }
-    
-};
+  };
 
 const logout=(req,res)=>{
     res.cookie('token',null,{
