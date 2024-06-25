@@ -4,6 +4,9 @@ import path from 'path';
 
 import cloudinary from 'cloudinary';
 import AppError from '../utils/error.util.js';
+
+
+
 const getAllCourses = async function(req,res,next){
 try{
 const courses = await Course.find({}).select('-lectures');

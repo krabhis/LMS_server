@@ -125,6 +125,7 @@ const login = async (req, res, next) => {
   
     // Setting the token in the cookie with name token along with cookieOptions
     res.cookie('token', token, cookieOptions);
+
   
     res.status(200).json({
       success: true,
@@ -132,6 +133,8 @@ const login = async (req, res, next) => {
       user,
     });
   };
+
+
 
 const logout=(req,res)=>{
     res.cookie('token',null,{
@@ -171,7 +174,9 @@ user
 };
 
 const forgotPassword= async (req,res,next)=>{
+
     const {email}=req.body;
+    console.log(req.body);
 
     if(!email){
         return next(new AppError('Email is required',400));
