@@ -1,11 +1,11 @@
-import Course from '../models/course.model.js';
 import fs from 'fs/promises';
-import path from 'path'; 
+import path from 'path';
 
 import cloudinary from 'cloudinary';
+
+// import asyncHandler from '../middlewares/asyncHandler.middleware.js';
+import Course from '../models/course.model.js';
 import AppError from '../utils/error.util.js';
-
-
 
 const getAllCourses = async function(req,res,next){
 try{

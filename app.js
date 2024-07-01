@@ -32,7 +32,7 @@ credentials:true
 
 // Routing
 app.use('/api/v1/user',userRoutes);
-app.route('/api/v1/courses',courseRoutes);
+app.use('/api/v1/courses',courseRoutes);
 
 
 // config();
