@@ -31,6 +31,7 @@ const getLecturesByCourseId=  async function(req,res,next){
 try{
 const{id} = req.params;
 
+console.log(req.params);
 console.log('Course Detail>', course);
 
 const course= await Course.findById(id);
