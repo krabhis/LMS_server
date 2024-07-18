@@ -18,7 +18,7 @@ const authorizeRoles= (...roles)=>async(req,res,next)=>{
   const currentUserRoles= req.user.roles;
   if(roles.includes(currentUserRoles)){
      return next(
-        new AppError('You do not  have permission to  access ')
+        new AppError('You do not  have permission to  access')
      )
 
   }
