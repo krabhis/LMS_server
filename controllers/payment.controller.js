@@ -2,10 +2,11 @@ import AppError from "../utils/error.util.js";
 import { razorpay } from '../server.js';
 import User from '../models/user.model.js';
 import Payment from '../models/payment.model.js';
+import crypto from 'crypto';
 
 export const getRazorpayApiKey = async(req,res,next)=>{
 
-    req.status(200).json({
+    res.status(200).json({
         success:true,
         message:'Razorpay API key',
         key:process.env.RAZORPAY_KEY_ID,
@@ -16,7 +17,7 @@ export const getRazorpayApiKey = async(req,res,next)=>{
 
 export const buySubscription = async(req,res,next)=>{
     const { id }=req.user;
-    const user = await UserActivation.findById(id);
+    const user = await User.findById(id);
 
     if(!user){
         return next(
@@ -56,7 +57,7 @@ export const verifySubscription = async(req,res,next)=>{
     const {id}=req.user;
     const {razorpayPaymentId , razorpaySubscriptionId , razorpaySignature}=req.body;
  
-    const user = await User.findById.(id);
+    const user = await User.findById(id);
 
     const subscriptionId = user.subscription.id;
 
