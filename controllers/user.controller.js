@@ -291,15 +291,16 @@ res.status(200).json({
 
 })
 }
-const updateUser= async (req,res)=>{
+
+const updateUser= async (req,res,next)=>{
 const {fullName}=req.body;
-const { id }= req.user.id;
+const id = req.user.id;
 
 const user = await User.findById(id);
 
 if(!user){
 
-    return next(
+    return next (
         new AppError('User does not exist' , 400)
     )
 
