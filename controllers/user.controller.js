@@ -16,7 +16,6 @@ const cookieOptions={
 maxAge:7*24*60*60*1000, //7 days in millisec
 httpOnly:true,
 secure:true
-
 }
 const register= async (req ,res , next)=>{
 const{fullName , email , password}=req.body;
@@ -46,7 +45,7 @@ return next(new AppError('User registration failed, please try again',400))
 }
 
 // TODO File UPload
-// console.log('File Details:',req.file);
+// console.log('File Details:', req.file);
 
 if (req.file) {
     try {
@@ -99,6 +98,8 @@ user,
 
 
 };
+//Login API: Mostly application/json hota hai .
+
 const login = async (req, res, next) => {
     // Destructuring the necessary data from req object
     const { email, password } = req.body;

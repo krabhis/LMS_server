@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import mongoose from 'mongoose';
 
 import cloudinary from 'cloudinary';
 
@@ -29,13 +30,13 @@ return next ( new AppError(e.message,500) )
 
 const getLecturesByCourseId=  async function(req,res,next){
 try{
+
 const{id} = req.params;
 
-console.log(req.params);
-console.log('Course Detail>', course);
+
 
 const course= await Course.findById(id);
-console.log('Course detail>',course);
+// console.log('Course detail>',course);
 if(!course){
     return next(new AppError('Invalid Course Id',400))
 }
@@ -149,14 +150,19 @@ catch(e){
 
 const removeCourse= async (req,res,next)=>{
 
-try{
-    const{id}= req.params;
-    const course=await course.findById(id);
-    if(!course){
-        return next(
-            new AppError('Course with given Id does not exist',500)
-        )
-    }
+
+    try {
+        const { id } = req.params;
+        console.log('Params:', req.params);
+    
+        if (!mongoose.isValidObjectId(id)) {
+          return next(new AppError('Invalid Course ID format', 400));
+        }
+    
+        const course = await Course.findById(id);
+        if (!course) {
+          return next(new AppError('Course with given ID does not exist', 404));
+        }
 
     await Course.findByIdAndDelete(id);
     res.status(200).json({
@@ -178,7 +184,7 @@ catch(e){
 const addLectureToCourseById=async(req,res,next)=>{
 try{
     const { title,description}= req.body;
-const {id} = req.params;
+    const {id} = req.params;
 
 if(!title || !description){
     return next(
@@ -191,14 +197,14 @@ const course= await Course.findById(id);
 if(!course){
     return next(
         new AppError('Course with given id does not exist',500)
-    )
-
+    )   
 }
 const lectureData={
     title,
     description,
     lecture: { }
 };
+
 if(req.file){
     try{
         const result=await cloudinary.v2.uploader.upload(req.file.path,{
@@ -216,13 +222,9 @@ if(req.file){
         return next(
             new AppError(e.message,500))
     }
-
-
-
-
 }
 
-course.lectures.push(lectureData,500)
+course.lectures.push(lectureData)
 course.numberOfLectures= course.lectures.length;
 
 await course.save();
@@ -234,23 +236,11 @@ res.status(200).json({
 
 });
 
-
-
-
-
-
-
-
-    
+  
 } 
 catch(e){
-            return next(
-        new AppError(e.message,500))
-
-
+        return next(new AppError(e.message,500))
 }
-
-
 }
 
 

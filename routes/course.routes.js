@@ -25,18 +25,33 @@ router
     authorizeRoles('ADMIN'),
     upload.single('thumbnail'),
     createCourse
-  )
-  .delete(isLoggedIn,authorizeRoles('ADMIN'),removeCourse);
+  );
 
   router
   .route('/:id')
-  .get(isLoggedIn, authorizeSubscribers, getLecturesByCourseId) // Added authorizeSubscribers to check if user is admin or subscribed if not then forbid the access to the lectures
-  .post(
+  .put(
     isLoggedIn,
     authorizeRoles('ADMIN'),
-    upload.single('lecture'),
-    addLectureToCourseById
+    updateCourse
   )
-  .put(isLoggedIn, authorizeRoles('ADMIN'), updateCourse);
+  .delete(
+    isLoggedIn,
+    authorizeRoles('ADMIN'),
+    removeCourse
+  );
+
+router
+  .route('/:id/lectures')
+  .get(
+    isLoggedIn,
+    authorizeSubscribers,    
+    getLecturesByCourseId
+  )
+  .post(
+    isLoggedIn,
+    authorizeRoles('ADMIN'),   
+    upload.single('lecture'),  
+    addLectureToCourseById
+  );
 
 export default router;

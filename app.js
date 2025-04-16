@@ -3,6 +3,7 @@ dotenv.config();
 import express from 'express';
 import userRoutes from './routes/user.routes.js'
 import courseRoutes from './routes/course.routes.js'
+import paymentRoutes from './routes/payment.routes.js'
 import miscellaneousRoutes from'./routes/miscellaneous.routes.js'
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
@@ -34,6 +35,7 @@ credentials:true
 // Routing
 app.use('/api/v1/user',userRoutes);
 app.use('/api/v1/courses',courseRoutes);
+app.use('/api/v1/payments', paymentRoutes);
 app.use('/api/v1/', miscellaneousRoutes);
 
 
