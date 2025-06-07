@@ -5,7 +5,8 @@ import {
   getAllCourses,
   getLecturesByCourseId,
   removeCourse,
-  updateCourse
+  updateCourse,
+  removeLectureFromCourse
 } from '../controllers/course.controller.js';
 
 import {
@@ -25,7 +26,10 @@ router
     authorizeRoles('ADMIN'),
     upload.single('thumbnail'),
     createCourse
-  );
+  )
+  .delete(isLoggedIn, authorizeRoles('ADMIN'), removeLectureFromCourse);
+  
+
 
   router
   .route('/:id')
