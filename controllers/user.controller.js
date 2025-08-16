@@ -3,8 +3,8 @@ import AppError from "../utils/error.util.js";
 import cloudinary from 'cloudinary';
 import jwt from "jsonwebtoken";
 import fs from 'fs/promises';
-import bcrypt from 'bcrypt';
-import sendEmail from "../utils/sendEmail.js";
+import bcrypt from 'bcryptjs';
+import sendEmail from "../utils/sendEmail.js";  
 import crypto from 'crypto';
 // import { log } from "console";
 // import asyncHandler from '../middlewares/asyncHandler.middleware.js
