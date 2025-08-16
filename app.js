@@ -34,12 +34,10 @@ app.use(morgan('dev'));//middleware
 // }));
 
 app.use(cors({
-  origin: [
-    "http://localhost:5173", // local dev
-    "https://tumhara-frontend.vercel.app" // deployed frontend
-  ],
+  origin: "*",
   credentials: true
 }));
+
 
 
 
