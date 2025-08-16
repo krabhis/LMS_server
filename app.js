@@ -27,10 +27,18 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());//middleware
 app.use(morgan('dev'));//middleware
 
-app.use(cors({
-origin:[process.env.FRONTEND_URL],
-credentials:true
+// app.use(cors({
+// origin:[process.env.FRONTEND_URL ],
+// credentials:true
 
+// }));
+
+app.use(cors({
+  origin: [
+    "http://localhost:5173", // local dev
+    "https://tumhara-frontend.vercel.app" // deployed frontend
+  ],
+  credentials: true
 }));
 
 
