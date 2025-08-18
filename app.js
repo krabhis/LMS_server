@@ -27,20 +27,19 @@ app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());//middleware
 app.use(morgan('dev'));//middleware
 
-// app.use(cors({
-// origin:[process.env.FRONTEND_URL ],
-// credentials:true
-
-// }));
-
 app.use(cors({
-  origin: "*",
+  origin: [
+    process.env.FRONTEND_URL,
+    "https://edu-project-lilac.vercel.app"
+  ],
   credentials: true
 }));
 
 
-
-
+// app.use(cors({
+//   origin: "*",
+//   credentials: true 
+// }));
 
 // Routing
 app.use('/api/v1/user',userRoutes);
